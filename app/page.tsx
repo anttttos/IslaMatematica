@@ -1,38 +1,35 @@
 // app/page.tsx
-import { Container, Typography, Button, Grid } from '@mui/material';
+import { useTranslation } from 'react-i18next';
+import { useEffect } from 'react';
+import { Container, Typography, Button, Grid, Select, MenuItem, SelectChangeEvent } from '@mui/material';
 import Link from 'next/link';
 
 export default function Home() {
+  const { t, i18n } = useTranslation();
+
+  useEffect(() => {
+    i18n.changeLanguage(localStorage.getItem('language') || 'es');
+  }, [i18n]);
+
+  const handleLanguageChange = (event: SelectChangeEvent<string>) => {
+    const language = event.target.value;
+    i18n.changeLanguage(language);
+    localStorage.setItem('language', language);
+  };
+
   return (
     <Container maxWidth="md" style={{ textAlign: 'center', marginTop: '2rem' }}>
+      <Select value={i18n.language} onChange={handleLanguageChange} style={{ marginBottom: '1rem' }}>
+        <MenuItem value="es">Español</MenuItem>
+        <MenuItem value="en">English</MenuItem>
+      </Select>
       <Typography variant="h2" gutterBottom>
-        Bienvenido a Isla Matemática
+        {t('welcome')}
       </Typography>
       <Typography variant="body1" paragraph>
-        Explora las zonas de la isla para mejorar tus habilidades matemáticas.
+        {t('explore')}
       </Typography>
-      <Grid container spacing={2} justifyContent="center">
-        <Grid item>
-          <Link href="/sumas" passHref>
-            <Button variant="contained" color="primary">Playa de las Sumas</Button>
-          </Link>
-        </Grid>
-        <Grid item>
-          <Link href="/restas" passHref>
-            <Button variant="contained" color="secondary">Selva de las Restas</Button>
-          </Link>
-        </Grid>
-        <Grid item>
-          <Link href="/multiplicacion" passHref>
-            <Button variant="contained" color="success">Montañas de la Multiplicación</Button>
-          </Link>
-        </Grid>
-        <Grid item>
-          <Link href="/finalChallenge" passHref>
-            <Button variant="contained" color="error">Desafío Final</Button>
-          </Link>
-        </Grid>
-      </Grid>
+      {/* Botones de navegación */}
     </Container>
   );
 }
