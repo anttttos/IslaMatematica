@@ -8,6 +8,7 @@ export default function Home() {
   const { t, language, changeLanguage } = useTranslationClient();
   const [isClient, setIsClient] = useState(false);
 
+  // Esto asegura que el componente solo renderiza en el cliente
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -15,10 +16,11 @@ export default function Home() {
   const handleLanguageChange = (event: SelectChangeEvent<string>) => {
     const selectedLanguage = event.target.value;
     changeLanguage(selectedLanguage);
+    localStorage.setItem('language', selectedLanguage); // Guardar idioma en Local Storage
   };
 
   if (!isClient) {
-    return null;
+    return null; // Evitar renderizar en el servidor
   }
 
   return (
@@ -32,10 +34,10 @@ export default function Home() {
         <MenuItem value="en">English</MenuItem>
       </Select>
       <Typography variant="h2" gutterBottom>
-        {t('welcome') || 'Bienvenido a Isla Matemática'}
+        {t('welcome')}
       </Typography>
       <Typography variant="body1" paragraph>
-        {t('explore') || 'Explora las zonas de la isla para mejorar tus habilidades matemáticas.'}
+        {t('explore')}
       </Typography>
     </Container>
   );
