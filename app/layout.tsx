@@ -1,4 +1,5 @@
 // app/layout.tsx
+import '../i18n'; // Importa la configuración de i18n
 import './globals.css';
 import { ReactNode } from 'react';
 import Header from '../components/Header';
@@ -21,4 +22,4 @@ const Layout = ({ children }: LayoutProps) => {
   );
 };
 
-export default Layout;
+export default Layout;

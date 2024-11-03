@@ -1,6 +1,5 @@
 // i18n.js
 import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
 
 const resources = {
   en: {
@@ -17,10 +16,14 @@ const resources = {
   }
 };
 
-i18n.use(initReactI18next).init({
-  resources,
-  lng: localStorage.getItem('language') || 'es', // Set default language from Local Storage
-  interpolation: { escapeValue: false }
-});
+// Inicializa `i18next` solo en el cliente
+if (typeof window !== 'undefined' && !i18n.isInitialized) {
+  i18n.init({
+    resources,
+    lng: localStorage.getItem('language') || 'es', // Idioma predeterminado
+    interpolation: { escapeValue: false },
+    fallbackLng: 'es',
+  });
+}
 
 export default i18n;
