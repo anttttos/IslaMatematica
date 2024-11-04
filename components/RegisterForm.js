@@ -1,26 +1,65 @@
 // components/RegisterForm.js
 import { useState } from 'react';
-import bcrypt from 'bcryptjs';
+import { TextField, Button, Container, Typography, Select, MenuItem, Box } from '@mui/material';
 
 const RegisterForm = () => {
   const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [language, setLanguage] = useState('es'); // Idioma predeterminado
+  const [message, setMessage] = useState(''); // Mensaje de feedback
 
-  const handleRegister = async () => {
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-    
-    // Guarda el usuario y la contraseña cifrada en la base de datos a través de una API
-    // Aquí puedes usar axios para enviar los datos a la API
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Enviar los datos del usuario a la API
+    const res = await fetch('/api/usuarios', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username, language }),
+    });
+
+    if (res.ok) {
+      setMessage('Usuario registrado con éxito');
+      setUsername(''); // Limpiar el campo de nombre de usuario
+    } else {
+      setMessage('Hubo un error al registrar el usuario');
+    }
   };
 
   return (
-    <div>
-      <h2>Registro de Usuario</h2>
-      <input type="text" placeholder="Nombre de usuario" value={username} onChange={(e) => setUsername(e.target.value)} />
-      <input type="password" placeholder="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} />
-      <button onClick={handleRegister}>Registrar</button>
-    </div>
+    <Container maxWidth="xs" style={{ marginTop: '2rem', textAlign: 'center' }}>
+      <Typography variant="h4" gutterBottom>
+        Registro de Usuario
+      </Typography>
+      <form onSubmit={handleSubmit}>
+        <Box display="flex" flexDirection="column" gap={2}>
+          <TextField
+            label="Nombre de usuario"
+            variant="outlined"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+          <Select
+            value={language}
+            onChange={(e) => setLanguage(e.target.value)}
+            variant="outlined"
+          >
+            <MenuItem value="es">Español</MenuItem>
+            <MenuItem value="en">English</MenuItem>
+          </Select>
+          <Button type="submit" variant="contained" color="primary">
+            Registrar
+          </Button>
+          {message && (
+            <Typography variant="body2" color="textSecondary">
+              {message}
+            </Typography>
+          )}
+        </Box>
+      </form>
+    </Container>
   );
 };
 
