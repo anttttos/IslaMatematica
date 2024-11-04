@@ -4,7 +4,7 @@ import clientPromise from '../../lib/mongodb';
 export default async function handler(req, res) {
   try {
     const client = await clientPromise;
-    const db = client.db('IslaMatematica'); // Cambia 'mydatabase' al nombre real de tu base de datos
+    const db = client.db('IslaMatemática'); // Cambia 'mydatabase' al nombre real de tu base de datos
 
     switch (req.method) {
       case 'GET':
