@@ -1,5 +1,5 @@
 // components/RegisterForm.js
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { TextField, Button, Container, Typography, Select, MenuItem, Box } from '@mui/material';
 
 const RegisterForm = () => {
@@ -7,8 +7,25 @@ const RegisterForm = () => {
   const [language, setLanguage] = useState('es'); // Idioma predeterminado
   const [message, setMessage] = useState(''); // Mensaje de feedback
 
+  // useEffect para cargar nombre y idioma desde localStorage si estamos en el cliente
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const savedUsername = localStorage.getItem('username');
+      const savedLanguage = localStorage.getItem('language');
+
+      if (savedUsername) setUsername(savedUsername);
+      if (savedLanguage) setLanguage(savedLanguage);
+    }
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Guardar en localStorage solo si estamos en el cliente
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('username', username);
+      localStorage.setItem('language', language);
+    }
 
     // Enviar los datos del usuario a la API
     const res = await fetch('/api/usuarios', {
