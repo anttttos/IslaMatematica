@@ -4,6 +4,7 @@ import { TextField, Button, Container, Typography, Select, MenuItem, Box } from 
 
 const RegisterForm = () => {
   const [username, setUsername] = useState('');
+  const [password, setPassword] = useState(''); // Nuevo campo para la contraseña
   const [language, setLanguage] = useState('es'); // Idioma predeterminado
   const [message, setMessage] = useState(''); // Mensaje de feedback
 
@@ -27,18 +28,19 @@ const RegisterForm = () => {
       localStorage.setItem('language', language);
     }
 
-    // Enviar los datos del usuario a la API
+    // Enviar los datos del usuario a la API, incluyendo la contraseña
     const res = await fetch('/api/usuarios', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ username, language }),
+      body: JSON.stringify({ username, password, language }), // Incluye contraseña en la solicitud
     });
 
     if (res.ok) {
       setMessage('Usuario registrado con éxito');
       setUsername(''); // Limpiar el campo de nombre de usuario
+      setPassword(''); // Limpiar el campo de contraseña
     } else {
       setMessage('Hubo un error al registrar el usuario');
     }
@@ -56,6 +58,14 @@ const RegisterForm = () => {
             variant="outlined"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+          <TextField
+            label="Contraseña"
+            type="password" // Campo de contraseña
+            variant="outlined"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             required
           />
           <Select

@@ -1,10 +1,11 @@
 // pages/api/usuarios.js
 import clientPromise from '../../lib/mongodb';
+import bcrypt from 'bcrypt';
 
 export default async function handler(req, res) {
   try {
     const client = await clientPromise;
-    const db = client.db('IslaMatemática'); // Cambia 'mydatabase' al nombre real de tu base de datos
+    const db = client.db('IslaMatemática');
 
     switch (req.method) {
       case 'GET':
@@ -12,14 +13,17 @@ export default async function handler(req, res) {
         res.status(200).json(usuarios);
         break;
       case 'POST':
-        const { username, language } = req.body;
-        if (!username || !language) {
-          res.status(400).json({ message: 'Nombre de usuario e idioma son obligatorios' });
+        const { username, password, language } = req.body;
+        if (!username || !password || !language) {
+          res.status(400).json({ message: 'Nombre de usuario, contraseña e idioma son obligatorios' });
           return;
         }
 
+        // Cifrar la contraseña antes de guardarla
+        const hashedPassword = await bcrypt.hash(password, 10);
+
         // Intenta insertar el usuario en la base de datos
-        const result = await db.collection('usuarios').insertOne({ username, language });
+        const result = await db.collection('usuarios').insertOne({ username, password: hashedPassword, language });
         if (result.acknowledged) {
           res.status(201).json({ message: 'Usuario agregado!' });
         } else {
