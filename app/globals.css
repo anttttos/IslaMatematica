@@ -1,21 +1,50 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+/* globals.css */
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-image: url('https://thumbs.dreamstime.com/b/fondo-tropical-de-la-isla-63853006.jpg'); /* Reemplaza con la URL de la imagen de la isla */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+}
+
+.container {
+  max-width: 500px;
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente para que el texto sea legible */
+  border-radius: 10px;
+}
+
+button {
+  width: 100%;
+  margin-top: 10px;
+  padding: 15px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  background-color: #007BFF;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.footer {
+  position: absolute;
+  bottom: 10px;
+  width: 100%;
+  text-align: center;
+  font-size: 12px;
+  color: white;
 }

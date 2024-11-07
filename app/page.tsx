@@ -1,44 +1,22 @@
 // app/page.tsx
-"use client";
-import { useEffect, useState } from 'react';
-import { Container, Typography, Select, MenuItem, SelectChangeEvent } from '@mui/material';
-import { useTranslationClient } from '../hooks/useTranslationClient';
+'use client';
+import { Button, Typography } from '@mui/material';
+import { useRouter } from 'next/navigation';
 
-export default function Home() {
-  const { t, language, changeLanguage } = useTranslationClient();
-  const [isClient, setIsClient] = useState(false);
-
-  // Esto asegura que el componente solo renderiza en el cliente
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  const handleLanguageChange = (event: SelectChangeEvent<string>) => {
-    const selectedLanguage = event.target.value;
-    changeLanguage(selectedLanguage);
-    localStorage.setItem('language', selectedLanguage); // Guardar idioma en Local Storage
-  };
-
-  if (!isClient) {
-    return null; // Evitar renderizar en el servidor
-  }
+const HomePage = () => {
+  const router = useRouter();
 
   return (
-    <Container maxWidth="md" style={{ textAlign: 'center', marginTop: '2rem' }}>
-      <Select
-        value={language}
-        onChange={handleLanguageChange}
-        style={{ marginBottom: '1rem' }}
-      >
-        <MenuItem value="es">Español</MenuItem>
-        <MenuItem value="en">English</MenuItem>
-      </Select>
-      <Typography variant="h2" gutterBottom>
-        {t('welcome')}
-      </Typography>
-      <Typography variant="body1" paragraph>
-        {t('explore')}
-      </Typography>
-    </Container>
+    <div className="container">
+      <Typography variant="h2" gutterBottom>Bienvenido a la Isla Matemática</Typography>
+      <Button variant="contained" color="primary" onClick={() => router.push('/game')}>
+        Jugar como Invitado
+      </Button>
+      <Button variant="contained" color="secondary" onClick={() => router.push('/auth')}>
+        Iniciar Sesión o Registrarse
+      </Button>
+    </div>
   );
-}
+};
+
+export default HomePage;

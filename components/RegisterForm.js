@@ -1,91 +1,69 @@
 // components/RegisterForm.js
-import { useState, useEffect } from 'react';
-import { TextField, Button, Container, Typography, Select, MenuItem, Box } from '@mui/material';
+import { useState } from 'react';
+import { TextField, Button, Container, Typography, Select, MenuItem } from '@mui/material';
 
 const RegisterForm = () => {
   const [username, setUsername] = useState('');
-  const [password, setPassword] = useState(''); // Nuevo campo para la contraseña
-  const [language, setLanguage] = useState('es'); // Idioma predeterminado
-  const [message, setMessage] = useState(''); // Mensaje de feedback
-
-  // useEffect para cargar nombre y idioma desde localStorage si estamos en el cliente
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const savedUsername = localStorage.getItem('username');
-      const savedLanguage = localStorage.getItem('language');
-
-      if (savedUsername) setUsername(savedUsername);
-      if (savedLanguage) setLanguage(savedLanguage);
-    }
-  }, []);
+  const [password, setPassword] = useState('');
+  const [language, setLanguage] = useState('es'); // Idioma predeterminado: español
+  const [message, setMessage] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Guardar en localStorage solo si estamos en el cliente
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('username', username);
-      localStorage.setItem('language', language);
-    }
-
-    // Enviar los datos del usuario a la API, incluyendo la contraseña
     const res = await fetch('/api/usuarios', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ username, password, language }), // Incluye contraseña en la solicitud
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password, language }), // Incluye el idioma
     });
 
     if (res.ok) {
       setMessage('Usuario registrado con éxito');
-      setUsername(''); // Limpiar el campo de nombre de usuario
-      setPassword(''); // Limpiar el campo de contraseña
+      setUsername('');
+      setPassword('');
+      setLanguage('es'); // Restablece el idioma a español después del registro
     } else {
-      setMessage('Hubo un error al registrar el usuario');
+      const { message } = await res.json();
+      setMessage(message || 'Error en el registro');
     }
   };
 
   return (
     <Container maxWidth="xs" style={{ marginTop: '2rem', textAlign: 'center' }}>
-      <Typography variant="h4" gutterBottom>
-        Registro de Usuario
-      </Typography>
+      <Typography variant="h4" gutterBottom>Registro de Usuario</Typography>
       <form onSubmit={handleSubmit}>
-        <Box display="flex" flexDirection="column" gap={2}>
-          <TextField
-            label="Nombre de usuario"
-            variant="outlined"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-          <TextField
-            label="Contraseña"
-            type="password" // Campo de contraseña
-            variant="outlined"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          <Select
-            value={language}
-            onChange={(e) => setLanguage(e.target.value)}
-            variant="outlined"
-          >
-            <MenuItem value="es">Español</MenuItem>
-            <MenuItem value="en">English</MenuItem>
-          </Select>
-          <Button type="submit" variant="contained" color="primary">
-            Registrar
-          </Button>
-          {message && (
-            <Typography variant="body2" color="textSecondary">
-              {message}
-            </Typography>
-          )}
-        </Box>
+        <TextField
+          label="Nombre de usuario"
+          variant="outlined"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          label="Contraseña"
+          type="password"
+          variant="outlined"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          fullWidth
+          margin="normal"
+        />
+        <Select
+          value={language}
+          onChange={(e) => setLanguage(e.target.value)}
+          fullWidth
+          margin="normal"
+          variant="outlined"
+        >
+          <MenuItem value="es">Español</MenuItem>
+          <MenuItem value="en">English</MenuItem>
+        </Select>
+        <Button type="submit" variant="contained" color="primary" fullWidth>Registrar</Button>
       </form>
+      {message && <Typography variant="body2" color="textSecondary">{message}</Typography>}
     </Container>
   );
 };

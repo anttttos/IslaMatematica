@@ -1,6 +1,6 @@
 // pages/api/login.js
 import clientPromise from '../../lib/mongodb';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -16,23 +16,21 @@ export default async function handler(req, res) {
   try {
     const client = await clientPromise;
     const db = client.db('IslaMatemática');
-
-    // Verificar si el usuario existe
     const user = await db.collection('usuarios').findOne({ username });
+
     if (!user) {
       return res.status(401).json({ message: 'Credenciales incorrectas' });
     }
 
-    // Comparar la contraseña encriptada
+    // Compara la contraseña ingresada con el hash almacenado
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       return res.status(401).json({ message: 'Credenciales incorrectas' });
     }
 
-    // Retornar éxito de autenticación
     res.status(200).json({ message: 'Autenticación exitosa' });
   } catch (error) {
-    console.error('Error en el login:', error);
+    console.error('Error interno del servidor:', error);
     res.status(500).json({ message: 'Error interno del servidor' });
   }
 }
