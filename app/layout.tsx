@@ -1,15 +1,34 @@
-// app/layout.tsx
-import '../i18n';
+'use client';
 import './globals.css';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
+import i18n from '../i18n';
+import { Select, MenuItem } from '@mui/material';
 
 type LayoutProps = {
   children: ReactNode;
 };
 
 const Layout = ({ children }: LayoutProps) => {
+  // Estado local para controlar el idioma
+  const [language, setLanguage] = useState('es');
+
+  // Efecto para cargar el idioma de localStorage al montar
+  useEffect(() => {
+    const storedLanguage = localStorage.getItem('language') || 'es';
+    setLanguage(storedLanguage);
+    i18n.changeLanguage(storedLanguage);
+  }, []);
+
+  // Manejar cambio de idioma
+  const handleLanguageChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    const newLanguage = event.target.value as string;
+    setLanguage(newLanguage);
+    i18n.changeLanguage(newLanguage);
+    localStorage.setItem('language', newLanguage);
+  };
+
   return (
-    <html lang="es">
+    <html lang={language}>
       <body
         style={{
           display: 'flex',
@@ -21,6 +40,22 @@ const Layout = ({ children }: LayoutProps) => {
           backgroundSize: 'cover',
         }}
       >
+        <div
+          style={{
+            position: 'absolute',
+            top: '10px',
+            right: '10px',
+          }}
+        >
+          <Select
+            value={language}
+            onChange={handleLanguageChange}
+            style={{ background: '#ffffff', borderRadius: '5px', padding: '5px' }}
+          >
+            <MenuItem value="es">Español</MenuItem>
+            <MenuItem value="en">English</MenuItem>
+          </Select>
+        </div>
         <main
           style={{
             display: 'flex',

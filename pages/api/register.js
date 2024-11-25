@@ -4,10 +4,14 @@ import bcrypt from 'bcryptjs';
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
-    const { username, password } = req.body;
+    const { username, password, language } = req.body; // Incluimos el idioma
 
     if (!username || !password) {
-      return res.status(400).json({ message: 'Nombre de usuario y contraseña son obligatorios' });
+      const message =
+        language === 'en'
+          ? 'Username and password are required'
+          : 'Nombre de usuario y contraseña son obligatorios';
+      return res.status(400).json({ message });
     }
 
     try {
@@ -21,15 +25,31 @@ export default async function handler(req, res) {
       const result = await db.collection('usuarios').insertOne({ username, password: hashedPassword });
 
       if (result.acknowledged) {
-        res.status(201).json({ message: 'Usuario registrado con éxito' });
+        const message =
+          language === 'en'
+            ? 'User registered successfully'
+            : 'Usuario registrado con éxito';
+        res.status(201).json({ message });
       } else {
-        res.status(500).json({ message: 'Error al registrar el usuario' });
+        const message =
+          language === 'en'
+            ? 'Error registering the user'
+            : 'Error al registrar el usuario';
+        res.status(500).json({ message });
       }
     } catch (error) {
       console.error('Error en el registro:', error);
-      res.status(500).json({ message: 'Error en el servidor' });
+      const message =
+        language === 'en'
+          ? 'Server error'
+          : 'Error en el servidor';
+      res.status(500).json({ message });
     }
   } else {
-    res.status(405).json({ message: 'Método no permitido' });
+    const message =
+      req.body.language === 'en'
+        ? 'Method not allowed'
+        : 'Método no permitido';
+    res.status(405).json({ message });
   }
 }

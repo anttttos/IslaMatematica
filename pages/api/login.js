@@ -4,13 +4,21 @@ import bcrypt from 'bcryptjs';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Método no permitido' });
+    const message =
+      req.body.language === 'en'
+        ? 'Method not allowed'
+        : 'Método no permitido';
+    return res.status(405).json({ message });
   }
 
-  const { username, password } = req.body;
+  const { username, password, language } = req.body;
 
   if (!username || !password) {
-    return res.status(400).json({ message: 'Nombre de usuario y contraseña son obligatorios' });
+    const message =
+      language === 'en'
+        ? 'Username and password are required'
+        : 'Nombre de usuario y contraseña son obligatorios';
+    return res.status(400).json({ message });
   }
 
   try {
@@ -19,18 +27,34 @@ export default async function handler(req, res) {
     const user = await db.collection('usuarios').findOne({ username });
 
     if (!user) {
-      return res.status(401).json({ message: 'Credenciales incorrectas' });
+      const message =
+        language === 'en'
+          ? 'Invalid credentials'
+          : 'Credenciales incorrectas';
+      return res.status(401).json({ message });
     }
 
     // Compara la contraseña ingresada con el hash almacenado
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      return res.status(401).json({ message: 'Credenciales incorrectas' });
+      const message =
+        language === 'en'
+          ? 'Invalid credentials'
+          : 'Credenciales incorrectas';
+      return res.status(401).json({ message });
     }
 
-    res.status(200).json({ message: 'Autenticación exitosa' });
+    const message =
+      language === 'en'
+        ? 'Login successful'
+        : 'Autenticación exitosa';
+    res.status(200).json({ message });
   } catch (error) {
     console.error('Error interno del servidor:', error);
-    res.status(500).json({ message: 'Error interno del servidor' });
+    const message =
+      language === 'en'
+        ? 'Internal server error'
+        : 'Error interno del servidor';
+    res.status(500).json({ message });
   }
 }

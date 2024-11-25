@@ -1,29 +1,30 @@
-// i18n.js
 import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
 
 const resources = {
   en: {
     translation: {
       welcome: 'Welcome to Math Island',
-      explore: 'Explore the zones of the island to improve your math skills.',
-    }
+      play_as_guest: 'Play as Guest',
+      login_or_register: 'Login or Register',
+    },
   },
   es: {
     translation: {
       welcome: 'Bienvenido a Isla Matemática',
-      explore: 'Explora las zonas de la isla para mejorar tus habilidades matemáticas.',
-    }
-  }
+      play_as_guest: 'Jugar como Invitado',
+      login_or_register: 'Iniciar Sesión o Registrarse',
+    },
+  },
 };
 
-// Inicializa `i18next` solo en el cliente
-if (typeof window !== 'undefined' && !i18n.isInitialized) {
-  i18n.init({
+i18n
+  .use(initReactI18next)
+  .init({
     resources,
-    lng: localStorage.getItem('language') || 'es', // Idioma predeterminado
-    interpolation: { escapeValue: false },
+    lng: typeof window !== 'undefined' ? localStorage.getItem('language') || 'es' : 'es',
     fallbackLng: 'es',
+    interpolation: { escapeValue: false },
   });
-}
 
 export default i18n;
