@@ -1,44 +1,54 @@
-// pages/game/sumas.js
-import React, { useState } from 'react';
-import { Container, Typography, Button, TextField } from '@mui/material';
+// pages/game/suma.js
+import { useState } from 'react';
+import { Button, Typography, Container, TextField } from '@mui/material';
 
-const SumaChallenge = () => {
-  const [userInput, setUserInput] = useState('');
-  const [message, setMessage] = useState('');
-  const answer = 7; // Cambia este valor para el desafío
+export default function SumaChallenge() {
+  const [score, setScore] = useState(0);
+  const [question, setQuestion] = useState(generateQuestion());
+  const [userAnswer, setUserAnswer] = useState('');
+  const [feedback, setFeedback] = useState('');
+
+  function generateQuestion() {
+    const num1 = Math.floor(Math.random() * 10);
+    const num2 = Math.floor(Math.random() * 10);
+    return { num1, num2, answer: num1 + num2 };
+  }
 
   const handleCheckAnswer = () => {
-    if (parseInt(userInput) === answer) {
-      setMessage('¡Correcto! Bien hecho.');
+    if (parseInt(userAnswer) === question.answer) {
+      setScore(score + 1);
+      setFeedback('¡Correcto!');
     } else {
-      setMessage('Intenta de nuevo.');
+      setFeedback('Incorrecto, intenta nuevamente.');
     }
+    setUserAnswer('');
+    setQuestion(generateQuestion());
   };
 
   return (
-    <Container maxWidth="sm" style={{ textAlign: 'center', marginTop: '2rem' }}>
-      <Typography variant="h4" gutterBottom>Playa de las Sumas</Typography>
-      <Typography variant="body1" paragraph>
-        ¿Cuál es el resultado de 3 + 4?
+    <Container style={{ textAlign: 'center', marginTop: '2rem' }}>
+      <Typography variant="h4">Playa de las Sumas</Typography>
+      <Typography variant="body1" style={{ margin: '1rem 0' }}>
+        Resuelve la suma: {question.num1} + {question.num2}
       </Typography>
       <TextField
-        label="Tu respuesta"
-        variant="outlined"
-        value={userInput}
-        onChange={(e) => setUserInput(e.target.value)}
-        fullWidth
-        style={{ marginBottom: '1rem' }}
+        label="Respuesta"
+        value={userAnswer}
+        onChange={(e) => setUserAnswer(e.target.value)}
+        type="number"
       />
-      <Button variant="contained" color="primary" onClick={handleCheckAnswer}>
-        Comprobar respuesta
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={handleCheckAnswer}
+        style={{ marginLeft: '1rem' }}
+      >
+        Comprobar
       </Button>
-      {message && (
-        <Typography variant="body2" color="textSecondary" style={{ marginTop: '1rem' }}>
-          {message}
-        </Typography>
-      )}
+      <Typography variant="body1" style={{ margin: '1rem 0', color: feedback === '¡Correcto!' ? 'green' : 'red' }}>
+        {feedback}
+      </Typography>
+      <Typography variant="h6">Puntaje: {score}</Typography>
     </Container>
   );
-};
-
-export default SumaChallenge;
+}
