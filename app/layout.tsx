@@ -36,7 +36,7 @@ const Layout = ({ children }: LayoutProps) => {
           alignItems: 'center',
           justifyContent: 'center',
           minHeight: '100vh',
-          background: 'url("https://img.freepik.com/vector-premium/isla-tropical-dibujos-animados-palmeras-montanas-mar-azul-flores-vides-ilustracion_273525-12.jpg") no-repeat center center fixed',
+          background: 'url("/images/my-image.png") no-repeat center center fixed',
           backgroundSize: 'cover',
         }}
       >

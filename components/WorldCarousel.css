@@ -1,0 +1,117 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    height: 100vh;
+    overflow: hidden;
+  }
+  
+  .container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100%;
+    background: url('/images/fond.png') repeat-y center center;
+    background-size: cover;
+  }
+  
+  .top-section {
+    background: url('/images/top.jpg') no-repeat center top;
+    background-size: cover;
+    height: 120px;
+  }
+  
+  .middle-section {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .bottom-section {
+    background: url('/images/bottom.png') no-repeat center bottom;
+    background-size: cover;
+    height: 120px;
+  }
+  
+  /* Carrusel */
+  .carousel-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    height: 600px;
+    perspective: 1500px;
+    overflow: hidden;
+  }
+  
+  .carousel-item {
+    position: absolute;
+    width: 300px;
+    height: 400px;
+    transition: transform 0.5s ease, z-index 0.5s ease, opacity 0.5s ease;
+    transform-style: preserve-3d;
+    cursor: pointer;
+    text-align: center;
+    opacity: 0.6;
+  }
+  
+  .carousel-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 50%;
+    box-shadow: none;
+    transition: transform 0.3s ease;
+  }
+  
+  .carousel-item img:hover {
+    transform: scale(1.1);
+  }
+  
+  .carousel-item.active {
+    transform: translateZ(300px) scale(1.3);
+    z-index: 3;
+    opacity: 1;
+  }
+  
+  .carousel-item.left {
+    transform: translateX(-250px) rotateY(25deg) scale(0.9);
+    z-index: 2;
+  }
+  
+  .carousel-item.right {
+    transform: translateX(250px) rotateY(-25deg) scale(0.9);
+    z-index: 2;
+  }
+  
+  .carousel-item.hidden {
+    transform: translateZ(-300px) scale(0.7);
+    z-index: 1;
+    opacity: 0.3;
+  }
+  
+  .carousel-arrow {
+    position: absolute;
+    top: 50%;
+    width: 50px;
+    height: 50px;
+    background-color: transparent;
+    background-size: contain;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    z-index: 10;
+    transform: translateY(-50%);
+  }
+  
+  .carousel-arrow-left {
+    left: 20px;
+    background-image: url('/images/arrow-left.png');
+  }
+  
+  .carousel-arrow-right {
+    right: 20px;
+    background-image: url('/images/arrow-right.png');
+  }
+  
