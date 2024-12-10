@@ -17,8 +17,8 @@ const Division = () => {
   }, []);
 
   function generateNewProblem() {
-    const a = generateRandomNumber(1, 10) * generateRandomNumber(1, 10); // Multiplica para garantizar divisiones exactas
-    const b = generateRandomNumber(1, 10);
+    const b = generateRandomNumber(1, 10); // Genera el divisor
+    const a = b * generateRandomNumber(1, 10); // Genera el dividendo como múltiplo de b
     setNum1(a);
     setNum2(b);
     setUserAnswer('');
@@ -39,13 +39,6 @@ const Division = () => {
       generateNewProblem();
     } else {
       setFeedback('Respuesta incorrecta. ¡Intenta de nuevo!');
-    }
-
-    // Si se completa la meta, redireccionar
-    if (completedExercises + 1 === goal) {
-      setTimeout(() => {
-        router.push('/game/sumas-y-restas'); // Redirige a la página hipotética "Sumas y Restas"
-      }, 1000); // Espera 1 segundo antes de redirigir
     }
   };
 
@@ -135,6 +128,30 @@ const Division = () => {
       <p style={{ fontSize: '1.2rem', marginTop: '20px', color: '#555' }}>
         {feedback}
       </p>
+      {completedExercises >= goal && (
+        <button
+          onClick={() => router.push('/game/sumrrest')}
+          style={{
+            marginTop: '30px',
+            padding: '15px 30px',
+            fontSize: '1.5rem',
+            backgroundColor: '#3498db',
+            color: 'white',
+            border: 'none',
+            borderRadius: '10px',
+            cursor: 'pointer',
+            transition: '0.3s',
+          }}
+          onMouseEnter={(e) =>
+            (e.target.style.backgroundColor = '#2980b9')
+          }
+          onMouseLeave={(e) =>
+            (e.target.style.backgroundColor = '#3498db')
+          }
+        >
+          Siguiente Isla: Bosque Sumirresta
+        </button>
+      )}
     </div>
   );
 };

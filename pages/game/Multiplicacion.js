@@ -40,17 +40,16 @@ const Multiplicacion = () => {
     } else {
       setFeedback('Respuesta incorrecta. ¡Intenta de nuevo!');
     }
-
-    // Si se completa la meta, redireccionar
-    if (completedExercises + 1 === goal) {
-      setTimeout(() => {
-        router.push('/game/division'); // Redirige a la página de la división
-      }, 1000); // Espera 1 segundo antes de redirigir
-    }
   };
 
   const handleNext = () => {
-    router.push('/game/division'); // Botón para avanzar manualmente
+    if (completedExercises >= goal) {
+      router.push('/game/division'); // Redirige a la página de la división
+    } else {
+      setFeedback(
+        `Debes completar ${goal - completedExercises} ejercicios más para avanzar.`
+      );
+    }
   };
 
   return (
@@ -139,28 +138,30 @@ const Multiplicacion = () => {
       <p style={{ fontSize: '1.2rem', marginTop: '20px', color: '#555' }}>
         {feedback}
       </p>
-      <button
-        onClick={handleNext}
-        style={{
-          marginTop: '30px',
-          padding: '15px 30px',
-          fontSize: '1.5rem',
-          backgroundColor: '#3498db',
-          color: 'white',
-          border: 'none',
-          borderRadius: '10px',
-          cursor: 'pointer',
-          transition: '0.3s',
-        }}
-        onMouseEnter={(e) =>
-          (e.target.style.backgroundColor = '#2980b9')
-        }
-        onMouseLeave={(e) =>
-          (e.target.style.backgroundColor = '#3498db')
-        }
-      >
-        Siguiente Isla: División
-      </button>
+      {completedExercises >= goal && (
+        <button
+          onClick={handleNext}
+          style={{
+            marginTop: '30px',
+            padding: '15px 30px',
+            fontSize: '1.5rem',
+            backgroundColor: '#3498db',
+            color: 'white',
+            border: 'none',
+            borderRadius: '10px',
+            cursor: 'pointer',
+            transition: '0.3s',
+          }}
+          onMouseEnter={(e) =>
+            (e.target.style.backgroundColor = '#2980b9')
+          }
+          onMouseLeave={(e) =>
+            (e.target.style.backgroundColor = '#3498db')
+          }
+        >
+          Siguiente Isla: Playa de la División
+        </button>
+      )}
     </div>
   );
 };

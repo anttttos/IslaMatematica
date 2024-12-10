@@ -16,6 +16,7 @@ const worlds = [
 const WorldCarousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const router = useRouter();
+  let touchStartX = 0;
 
   const getClassName = (index) => {
     const diff = (index - currentIndex + worlds.length) % worlds.length;
@@ -37,8 +38,25 @@ const WorldCarousel = () => {
     router.push(link);
   };
 
+  const handleTouchStart = (e) => {
+    touchStartX = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e) => {
+    const touchEndX = e.changedTouches[0].clientX;
+    if (touchEndX < touchStartX) {
+      handleNext();
+    } else if (touchEndX > touchStartX) {
+      handlePrevious();
+    }
+  };
+
   return (
-    <div className="carousel-container">
+    <div
+      className="carousel-container"
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
       <button
         className="carousel-arrow carousel-arrow-left"
         onClick={handlePrevious}
