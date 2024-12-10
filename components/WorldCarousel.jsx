@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
+import { useRouter } from 'next/router';
 import './WorldCarousel.css';
 
 const worlds = [
-  { name: 'Valle de las Sumas', image: '/images/mundo1.png' },
-  { name: 'Desierto de las Restas', image: '/images/mundo2.png' },
-  { name: 'Invierno de la Multiplicación', image: '/images/mundo3.png' },
-  { name: 'Playa de la División', image: '/images/mundo4.png' },
+  { name: 'Valle de las Sumas', image: '/images/mundo1.png', link: '/game/Sumas' },
+  { name: 'Desierto de las Restas', image: '/images/mundo2.png', link: '/game/Restas' },
+  { name: 'Invierno de la Multiplicación', image: '/images/mundo3.png', link: '/game/Multiplicacion' },
+  { name: 'Playa de la División', image: '/images/mundo4.png', link: '/game/division' },
 ];
 
 const WorldCarousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const router = useRouter();
 
   const getClassName = (index) => {
     const diff = (index - currentIndex + worlds.length) % worlds.length;
@@ -27,6 +29,10 @@ const WorldCarousel = () => {
     setCurrentIndex((prevIndex) => (prevIndex === worlds.length - 1 ? 0 : prevIndex + 1));
   };
 
+  const handleSelectWorld = (link) => {
+    router.push(link);
+  };
+
   return (
     <div className="carousel-container">
       <button
@@ -38,7 +44,7 @@ const WorldCarousel = () => {
         <div
           key={index}
           className={getClassName(index)}
-          onClick={() => alert(`Seleccionaste: ${world.name}`)}
+          onClick={() => handleSelectWorld(world.link)}
         >
           <img src={world.image} alt={world.name} />
           <p>{world.name}</p>
