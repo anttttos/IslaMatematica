@@ -1,53 +1,61 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation'; // Para redirigir al siguiente mundo
+import { useRouter } from 'next/navigation';
 
-const Sumas = () => {
-  const router = useRouter();
-  const [num1, setNum1] = useState(0);
-  const [num2, setNum2] = useState(0);
+const SumaResta = () => {
+  const [expression, setExpression] = useState(''); // Guarda la expresión matemática
+  const [correctAnswer, setCorrectAnswer] = useState(0); // Guarda el resultado correcto
   const [userAnswer, setUserAnswer] = useState('');
   const [feedback, setFeedback] = useState('');
-  const [score, setScore] = useState(0);
-  const targetScore = 5; // Meta para avanzar
+  const [completedExercises, setCompletedExercises] = useState(0); // Contador de ejercicios resueltos
+  const goal = 5; // Meta de ejercicios para avanzar
+  const router = useRouter();
 
   useEffect(() => {
     generateNewProblem();
   }, []);
 
-  function generateNewProblem() {
-    setNum1(generateRandomNumber(1, 50));
-    setNum2(generateRandomNumber(1, 50));
+  const generateNewProblem = () => {
+    const numTerms = generateRandomNumber(3, 5); // Número de términos en la expresión (entre 3 y 5)
+    let newExpression = '';
+    let currentAnswer = 0;
+
+    for (let i = 0; i < numTerms; i++) {
+      const number = generateRandomNumber(1, 20); // Números entre 1 y 20
+      const operator = i > 0 ? (Math.random() > 0.5 ? '+' : '-') : ''; // Operadores aleatorios
+
+      newExpression += `${operator} ${number} `;
+      currentAnswer = eval(newExpression.trim()); // Calcula el resultado (eval solo en entornos controlados)
+    }
+
+    setExpression(newExpression.trim());
+    setCorrectAnswer(currentAnswer);
     setUserAnswer('');
     setFeedback('');
-  }
+  };
 
-  function generateRandomNumber(min, max) {
+  const generateRandomNumber = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const correctAnswer = num1 + num2;
 
     if (parseInt(userAnswer) === correctAnswer) {
-      setFeedback('¡Correcto! Vamos con otra suma.');
-      setScore(score + 1);
-      if (score + 1 >= targetScore) {
-        alert('¡Meta alcanzada! Avanzando al siguiente mundo...');
-        router.push('/game/Restas'); // Redirige a la isla de las restas
-      } else {
-        generateNewProblem();
-      }
+      setFeedback('¡Correcto! Resolvamos otra combinación.');
+      setCompletedExercises((prev) => prev + 1);
+      generateNewProblem();
     } else {
-      setFeedback('Intenta de nuevo.');
+      setFeedback('Respuesta incorrecta. ¡Intenta de nuevo!');
     }
-  };
 
-  const handleSkip = () => {
-    alert('Avanzando al siguiente mundo...');
-    router.push('/game/Restas'); // Redirige a la isla de las restas
+    // Si se completa la meta, redireccionar
+    if (completedExercises + 1 === goal) {
+      setTimeout(() => {
+        router.push('/game/multiplicacionDivision'); // Redirige a la siguiente página
+      }, 1000);
+    }
   };
 
   return (
@@ -60,24 +68,33 @@ const Sumas = () => {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#ffe4b5', // Fondo cálido y atractivo
+        backgroundColor: '#a29bfe',
       }}
     >
       <h2 style={{ fontSize: '3rem', color: '#333', marginBottom: '20px' }}>
-        Desafío de Sumas
+        Desafío de Suma y Resta
       </h2>
       <p style={{ fontSize: '1.5rem', marginBottom: '30px' }}>
-        ¡Resuelve esta suma para avanzar!
+        ¡Resuelve esta combinación para avanzar!
+      </p>
+      <p
+        style={{
+          fontSize: '1.2rem',
+          color: '#fd79a8',
+          marginBottom: '20px',
+        }}
+      >
+        Progreso: {completedExercises}/{goal} ejercicios completados
       </p>
       <div
         style={{
           fontSize: '2.5rem',
           fontWeight: 'bold',
           marginBottom: '20px',
-          color: '#007BFF',
+          color: '#55efc4',
         }}
       >
-        {num1} + {num2} =
+        {expression}
       </div>
       <form
         onSubmit={handleSubmit}
@@ -107,53 +124,28 @@ const Sumas = () => {
           style={{
             padding: '15px 30px',
             fontSize: '1.5rem',
-            backgroundColor: '#28a745',
+            backgroundColor: '#0984e3',
             color: 'white',
             border: 'none',
             borderRadius: '10px',
             cursor: 'pointer',
             transition: '0.3s',
-            marginBottom: '20px',
           }}
           onMouseEnter={(e) =>
-            (e.target.style.backgroundColor = '#218838')
+            (e.target.style.backgroundColor = '#74b9ff')
           }
           onMouseLeave={(e) =>
-            (e.target.style.backgroundColor = '#28a745')
+            (e.target.style.backgroundColor = '#0984e3')
           }
         >
           Comprobar
         </button>
       </form>
-      <button
-        onClick={handleSkip}
-        style={{
-          padding: '15px 30px',
-          fontSize: '1.5rem',
-          backgroundColor: '#007BFF',
-          color: 'white',
-          border: 'none',
-          borderRadius: '10px',
-          cursor: 'pointer',
-          transition: '0.3s',
-        }}
-        onMouseEnter={(e) =>
-          (e.target.style.backgroundColor = '#0056b3')
-        }
-        onMouseLeave={(e) =>
-          (e.target.style.backgroundColor = '#007BFF')
-        }
-      >
-        Saltar al siguiente mundo
-      </button>
       <p style={{ fontSize: '1.2rem', marginTop: '20px', color: '#555' }}>
         {feedback}
-      </p>
-      <p style={{ fontSize: '1.2rem', marginTop: '10px', color: '#007BFF' }}>
-        Progreso: {score}/{targetScore}
       </p>
     </div>
   );
 };
 
-export default Sumas;
+export default SumaResta;

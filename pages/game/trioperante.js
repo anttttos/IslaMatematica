@@ -3,54 +3,73 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-const Multiplicacion = () => {
-  const [num1, setNum1] = useState(0);
-  const [num2, setNum2] = useState(0);
+const SumaRestaMultiplicacion = () => {
+  const [expression, setExpression] = useState('');
+  const [displayExpression, setDisplayExpression] = useState('');
+  const [correctAnswer, setCorrectAnswer] = useState(0);
   const [userAnswer, setUserAnswer] = useState('');
   const [feedback, setFeedback] = useState('');
-  const [completedExercises, setCompletedExercises] = useState(0); // Contador de ejercicios resueltos
-  const goal = 5; // Meta de ejercicios para avanzar
+  const [completedExercises, setCompletedExercises] = useState(0);
+  const goal = 5;
   const router = useRouter();
 
   useEffect(() => {
     generateNewProblem();
   }, []);
 
-  function generateNewProblem() {
-    const a = generateRandomNumber(1, 10);
-    const b = generateRandomNumber(1, 10);
-    setNum1(a);
-    setNum2(b);
+  const generateNewProblem = () => {
+    const numTerms = generateRandomNumber(3, 5); // Número de términos en la expresión
+    const operators = ['+', '-', '*'];
+    const numbers = [];
+    const ops = [];
+
+    for (let i = 0; i < numTerms; i++) {
+      numbers.push(generateRandomNumber(1, 10)); // Números aleatorios
+      if (i < numTerms - 1) {
+        ops.push(operators[Math.floor(Math.random() * operators.length)]); // Operadores aleatorios
+      }
+    }
+
+    // Genera la expresión en formato string
+    let expressionString = '';
+    let displayString = '';
+    for (let i = 0; i < numbers.length; i++) {
+      expressionString += numbers[i];
+      displayString += numbers[i];
+      if (i < ops.length) {
+        expressionString += ` ${ops[i]} `;
+        displayString += ` ${ops[i] === '*' ? '×' : ops[i]} `;
+      }
+    }
+
+    setExpression(expressionString.trim());
+    setDisplayExpression(displayString.trim());
+    setCorrectAnswer(eval(expressionString)); // Evalúa la expresión
     setUserAnswer('');
     setFeedback('');
-  }
+  };
 
-  function generateRandomNumber(min, max) {
+  const generateRandomNumber = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const correctAnswer = num1 * num2;
 
     if (parseInt(userAnswer) === correctAnswer) {
-      setFeedback('¡Correcto! Avancemos a la siguiente multiplicación.');
+      setFeedback('¡Correcto! Avanzando al siguiente ejercicio.');
       setCompletedExercises((prev) => prev + 1);
       generateNewProblem();
     } else {
       setFeedback('Respuesta incorrecta. ¡Intenta de nuevo!');
     }
 
-    // Si se completa la meta, redireccionar
+    // Si se cumple la meta, redirigir
     if (completedExercises + 1 === goal) {
       setTimeout(() => {
-        router.push('/game/division'); // Redirige a la página de la división
-      }, 1000); // Espera 1 segundo antes de redirigir
+        router.push('/game/numerilava'); // Redirige a la siguiente página
+      }, 1000);
     }
-  };
-
-  const handleNext = () => {
-    router.push('/game/division'); // Botón para avanzar manualmente
   };
 
   return (
@@ -63,22 +82,16 @@ const Multiplicacion = () => {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#f6e58d', // Fondo atractivo con tonos cálidos
+        backgroundColor: '#d1f2eb',
       }}
     >
       <h2 style={{ fontSize: '3rem', color: '#333', marginBottom: '20px' }}>
-        Desafío de Multiplicación
+        Isla de Suma, Resta y Multiplicación
       </h2>
       <p style={{ fontSize: '1.5rem', marginBottom: '30px' }}>
-        ¡Resuelve esta multiplicación para avanzar!
+        ¡Resuelve esta combinación para avanzar!
       </p>
-      <p
-        style={{
-          fontSize: '1.2rem',
-          color: '#ff7979',
-          marginBottom: '20px',
-        }}
-      >
+      <p style={{ fontSize: '1.2rem', color: '#17a589', marginBottom: '20px' }}>
         Progreso: {completedExercises}/{goal} ejercicios completados
       </p>
       <div
@@ -86,10 +99,10 @@ const Multiplicacion = () => {
           fontSize: '2.5rem',
           fontWeight: 'bold',
           marginBottom: '20px',
-          color: '#ffbe76',
+          color: '#1abc9c',
         }}
       >
-        {num1} × {num2} =
+        {displayExpression}
       </div>
       <form
         onSubmit={handleSubmit}
@@ -119,19 +132,15 @@ const Multiplicacion = () => {
           style={{
             padding: '15px 30px',
             fontSize: '1.5rem',
-            backgroundColor: '#e67e22',
+            backgroundColor: '#1abc9c',
             color: 'white',
             border: 'none',
             borderRadius: '10px',
             cursor: 'pointer',
             transition: '0.3s',
           }}
-          onMouseEnter={(e) =>
-            (e.target.style.backgroundColor = '#d35400')
-          }
-          onMouseLeave={(e) =>
-            (e.target.style.backgroundColor = '#e67e22')
-          }
+          onMouseEnter={(e) => (e.target.style.backgroundColor = '#148f77')}
+          onMouseLeave={(e) => (e.target.style.backgroundColor = '#1abc9c')}
         >
           Comprobar
         </button>
@@ -139,30 +148,8 @@ const Multiplicacion = () => {
       <p style={{ fontSize: '1.2rem', marginTop: '20px', color: '#555' }}>
         {feedback}
       </p>
-      <button
-        onClick={handleNext}
-        style={{
-          marginTop: '30px',
-          padding: '15px 30px',
-          fontSize: '1.5rem',
-          backgroundColor: '#3498db',
-          color: 'white',
-          border: 'none',
-          borderRadius: '10px',
-          cursor: 'pointer',
-          transition: '0.3s',
-        }}
-        onMouseEnter={(e) =>
-          (e.target.style.backgroundColor = '#2980b9')
-        }
-        onMouseLeave={(e) =>
-          (e.target.style.backgroundColor = '#3498db')
-        }
-      >
-        Siguiente Isla: División
-      </button>
     </div>
   );
 };
 
-export default Multiplicacion;
+export default SumaRestaMultiplicacion;

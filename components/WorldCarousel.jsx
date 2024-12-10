@@ -7,6 +7,10 @@ const worlds = [
   { name: 'Desierto de las Restas', image: '/images/mundo2.png', link: '/game/Restas' },
   { name: 'Invierno de la Multiplicación', image: '/images/mundo3.png', link: '/game/Multiplicacion' },
   { name: 'Playa de la División', image: '/images/mundo4.png', link: '/game/division' },
+  { name: 'Bosque Sumirresta', image: '/images/mundo5.png', link: '/game/sumrrest' },
+  { name: 'Montañas MultipliDivinas', image: '/images/mundo6.png', link: '/game/multiplidivina' },
+  { name: 'Las Nubes Trioperantes', image: '/images/mundo7.png', link: '/game/trioperante' },
+  { name: 'Volcán Numerilava', image: '/images/mundo8.png', link: '/game/numerilava' },
 ];
 
 const WorldCarousel = () => {

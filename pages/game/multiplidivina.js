@@ -3,54 +3,78 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-const Multiplicacion = () => {
-  const [num1, setNum1] = useState(0);
-  const [num2, setNum2] = useState(0);
+const MultiplicacionDivision = () => {
+  const [expression, setExpression] = useState('');
+  const [correctAnswer, setCorrectAnswer] = useState(0);
   const [userAnswer, setUserAnswer] = useState('');
   const [feedback, setFeedback] = useState('');
-  const [completedExercises, setCompletedExercises] = useState(0); // Contador de ejercicios resueltos
-  const goal = 5; // Meta de ejercicios para avanzar
+  const [completedExercises, setCompletedExercises] = useState(0);
+  const goal = 5;
   const router = useRouter();
 
   useEffect(() => {
     generateNewProblem();
   }, []);
 
-  function generateNewProblem() {
-    const a = generateRandomNumber(1, 10);
-    const b = generateRandomNumber(1, 10);
-    setNum1(a);
-    setNum2(b);
+  const generateNewProblem = () => {
+    const numTerms = generateRandomNumber(2, 4); // 2 a 4 términos
+    let newExpression = '';
+    let currentAnswer = generateRandomNumber(1, 10); // El primer número puede ser cualquiera
+
+    newExpression += currentAnswer;
+
+    for (let i = 1; i < numTerms; i++) {
+      const operator = Math.random() > 0.5 ? '×' : '÷';
+      let nextNumber;
+
+      if (operator === '×') {
+        nextNumber = generateRandomNumber(1, 10);
+        currentAnswer *= nextNumber;
+      } else {
+        // Genera un divisor que sea factor del número actual
+        nextNumber = generateFactor(currentAnswer);
+        currentAnswer /= nextNumber;
+      }
+
+      newExpression += ` ${operator} ${nextNumber}`;
+    }
+
+    setExpression(newExpression.trim());
+    setCorrectAnswer(currentAnswer);
     setUserAnswer('');
     setFeedback('');
-  }
+  };
 
-  function generateRandomNumber(min, max) {
+  const generateRandomNumber = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
+  };
+
+  const generateFactor = (number) => {
+    const factors = [];
+    for (let i = 1; i <= number; i++) {
+      if (number % i === 0) {
+        factors.push(i);
+      }
+    }
+    return factors[Math.floor(Math.random() * factors.length)];
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const correctAnswer = num1 * num2;
 
     if (parseInt(userAnswer) === correctAnswer) {
-      setFeedback('¡Correcto! Avancemos a la siguiente multiplicación.');
+      setFeedback('¡Correcto! Avancemos a la siguiente combinación.');
       setCompletedExercises((prev) => prev + 1);
       generateNewProblem();
     } else {
       setFeedback('Respuesta incorrecta. ¡Intenta de nuevo!');
     }
 
-    // Si se completa la meta, redireccionar
     if (completedExercises + 1 === goal) {
       setTimeout(() => {
-        router.push('/game/division'); // Redirige a la página de la división
-      }, 1000); // Espera 1 segundo antes de redirigir
+        router.push('/game/trioperante'); // Redirige a la siguiente página
+      }, 1000);
     }
-  };
-
-  const handleNext = () => {
-    router.push('/game/division'); // Botón para avanzar manualmente
   };
 
   return (
@@ -63,22 +87,16 @@ const Multiplicacion = () => {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#f6e58d', // Fondo atractivo con tonos cálidos
+        backgroundColor: '#ffeaa7',
       }}
     >
       <h2 style={{ fontSize: '3rem', color: '#333', marginBottom: '20px' }}>
-        Desafío de Multiplicación
+        Desafío de Multiplicación y División
       </h2>
       <p style={{ fontSize: '1.5rem', marginBottom: '30px' }}>
-        ¡Resuelve esta multiplicación para avanzar!
+        ¡Resuelve esta combinación para avanzar!
       </p>
-      <p
-        style={{
-          fontSize: '1.2rem',
-          color: '#ff7979',
-          marginBottom: '20px',
-        }}
-      >
+      <p style={{ fontSize: '1.2rem', color: '#ff7675', marginBottom: '20px' }}>
         Progreso: {completedExercises}/{goal} ejercicios completados
       </p>
       <div
@@ -86,10 +104,10 @@ const Multiplicacion = () => {
           fontSize: '2.5rem',
           fontWeight: 'bold',
           marginBottom: '20px',
-          color: '#ffbe76',
+          color: '#fab1a0',
         }}
       >
-        {num1} × {num2} =
+        {expression}
       </div>
       <form
         onSubmit={handleSubmit}
@@ -119,19 +137,15 @@ const Multiplicacion = () => {
           style={{
             padding: '15px 30px',
             fontSize: '1.5rem',
-            backgroundColor: '#e67e22',
+            backgroundColor: '#e17055',
             color: 'white',
             border: 'none',
             borderRadius: '10px',
             cursor: 'pointer',
             transition: '0.3s',
           }}
-          onMouseEnter={(e) =>
-            (e.target.style.backgroundColor = '#d35400')
-          }
-          onMouseLeave={(e) =>
-            (e.target.style.backgroundColor = '#e67e22')
-          }
+          onMouseEnter={(e) => (e.target.style.backgroundColor = '#d63031')}
+          onMouseLeave={(e) => (e.target.style.backgroundColor = '#e17055')}
         >
           Comprobar
         </button>
@@ -139,30 +153,8 @@ const Multiplicacion = () => {
       <p style={{ fontSize: '1.2rem', marginTop: '20px', color: '#555' }}>
         {feedback}
       </p>
-      <button
-        onClick={handleNext}
-        style={{
-          marginTop: '30px',
-          padding: '15px 30px',
-          fontSize: '1.5rem',
-          backgroundColor: '#3498db',
-          color: 'white',
-          border: 'none',
-          borderRadius: '10px',
-          cursor: 'pointer',
-          transition: '0.3s',
-        }}
-        onMouseEnter={(e) =>
-          (e.target.style.backgroundColor = '#2980b9')
-        }
-        onMouseLeave={(e) =>
-          (e.target.style.backgroundColor = '#3498db')
-        }
-      >
-        Siguiente Isla: División
-      </button>
     </div>
   );
 };
 
-export default Multiplicacion;
+export default MultiplicacionDivision;
