@@ -49,13 +49,6 @@ const SumaResta = () => {
     } else {
       setFeedback('Respuesta incorrecta. ¡Intenta de nuevo!');
     }
-
-    // Si se completa la meta, redireccionar
-    if (completedExercises + 1 === goal) {
-      setTimeout(() => {
-        router.push('/game/multiplicacionDivision'); // Redirige a la siguiente página
-      }, 1000);
-    }
   };
 
   return (
@@ -144,6 +137,30 @@ const SumaResta = () => {
       <p style={{ fontSize: '1.2rem', marginTop: '20px', color: '#555' }}>
         {feedback}
       </p>
+      {completedExercises >= goal && (
+        <button
+          onClick={() => router.push('/game/multiplidivina')}
+          style={{
+            marginTop: '30px',
+            padding: '15px 30px',
+            fontSize: '1.5rem',
+            backgroundColor: '#6c5ce7',
+            color: 'white',
+            border: 'none',
+            borderRadius: '10px',
+            cursor: 'pointer',
+            transition: '0.3s',
+          }}
+          onMouseEnter={(e) =>
+            (e.target.style.backgroundColor = '#341f97')
+          }
+          onMouseLeave={(e) =>
+            (e.target.style.backgroundColor = '#6c5ce7')
+          }
+        >
+          Siguiente Isla: Montañas Multiplidivinas
+        </button>
+      )}
     </div>
   );
 };

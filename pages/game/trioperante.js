@@ -31,20 +31,19 @@ const SumaRestaMultiplicacion = () => {
     }
 
     // Genera la expresión en formato string
-    let expressionString = '';
-    let displayString = '';
-    for (let i = 0; i < numbers.length; i++) {
-      expressionString += numbers[i];
-      displayString += numbers[i];
-      if (i < ops.length) {
-        expressionString += ` ${ops[i]} `;
-        displayString += ` ${ops[i] === '*' ? '×' : ops[i]} `;
-      }
+    let expressionString = numbers[0].toString();
+    let displayString = numbers[0].toString();
+    let currentAnswer = numbers[0];
+
+    for (let i = 1; i < numbers.length; i++) {
+      expressionString += ` ${ops[i - 1]} ${numbers[i]}`;
+      displayString += ` ${ops[i - 1] === '*' ? '×' : ops[i - 1]} ${numbers[i]}`;
+      currentAnswer = eval(expressionString); // Calcula el resultado paso a paso
     }
 
     setExpression(expressionString.trim());
     setDisplayExpression(displayString.trim());
-    setCorrectAnswer(eval(expressionString)); // Evalúa la expresión
+    setCorrectAnswer(Math.round(currentAnswer)); // Resultado redondeado para evitar errores de precisión
     setUserAnswer('');
     setFeedback('');
   };
@@ -57,18 +56,11 @@ const SumaRestaMultiplicacion = () => {
     e.preventDefault();
 
     if (parseInt(userAnswer) === correctAnswer) {
-      setFeedback('¡Correcto! Avanzando al siguiente ejercicio.');
+      setFeedback('¡Correcto! Avancemos a la siguiente combinación.');
       setCompletedExercises((prev) => prev + 1);
       generateNewProblem();
     } else {
       setFeedback('Respuesta incorrecta. ¡Intenta de nuevo!');
-    }
-
-    // Si se cumple la meta, redirigir
-    if (completedExercises + 1 === goal) {
-      setTimeout(() => {
-        router.push('/game/numerilava'); // Redirige a la siguiente página
-      }, 1000);
     }
   };
 
@@ -148,6 +140,26 @@ const SumaRestaMultiplicacion = () => {
       <p style={{ fontSize: '1.2rem', marginTop: '20px', color: '#555' }}>
         {feedback}
       </p>
+      {completedExercises >= goal && (
+        <button
+          onClick={() => router.push('/game/numerilava')}
+          style={{
+            marginTop: '30px',
+            padding: '15px 30px',
+            fontSize: '1.5rem',
+            backgroundColor: '#6c5ce7',
+            color: 'white',
+            border: 'none',
+            borderRadius: '10px',
+            cursor: 'pointer',
+            transition: '0.3s',
+          }}
+          onMouseEnter={(e) => (e.target.style.backgroundColor = '#341f97')}
+          onMouseLeave={(e) => (e.target.style.backgroundColor = '#6c5ce7')}
+        >
+          Siguiente Isla: Volcán Numerilava
+        </button>
+      )}
     </div>
   );
 };

@@ -10,7 +10,7 @@ const IslaLava = () => {
   const [userAnswer, setUserAnswer] = useState('');
   const [feedback, setFeedback] = useState('');
   const [completedExercises, setCompletedExercises] = useState(0);
-  const goal = 5; // Meta para avanzar
+  const goal = 20; // Meta de 20 ejercicios
   const router = useRouter();
 
   useEffect(() => {
@@ -38,7 +38,7 @@ const IslaLava = () => {
       displayString += numbers[i];
       if (i < ops.length) {
         const operator = ops[i];
-        expressionString += ` ${operator === '*' ? '*' : operator === '/' ? '/' : operator} `;
+        expressionString += ` ${operator} `;
         displayString += ` ${operator === '*' ? '×' : operator === '/' ? '÷' : operator} `;
       }
     }
@@ -66,7 +66,9 @@ const IslaLava = () => {
     if (parseInt(userAnswer) === correctAnswer) {
       setFeedback('¡Correcto! Avanzando al siguiente ejercicio.');
       setCompletedExercises((prev) => prev + 1);
-      generateNewProblem();
+      if (completedExercises + 1 < goal) {
+        generateNewProblem();
+      }
     } else {
       setFeedback('Respuesta incorrecta. ¡Intenta de nuevo!');
     }
@@ -74,7 +76,7 @@ const IslaLava = () => {
     // Si se cumple la meta, redirigir
     if (completedExercises + 1 === goal) {
       setTimeout(() => {
-        router.push('/game/finalIsla'); // Redirige a la siguiente página
+        router.push('/game/final'); // Redirige a la página de felicitaciones
       }, 1000);
     }
   };

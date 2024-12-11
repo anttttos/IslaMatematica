@@ -159,7 +159,7 @@ const Multiplicacion = () => {
             (e.target.style.backgroundColor = '#3498db')
           }
         >
-          Siguiente Isla: Playa de la División
+          Siguiente Isla: Playa de la División 
         </button>
       )}
     </div>

@@ -1,12 +1,15 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 const Restas = () => {
   const [num1, setNum1] = useState(0);
   const [num2, setNum2] = useState(0);
   const [userAnswer, setUserAnswer] = useState('');
   const [feedback, setFeedback] = useState('');
+  const [correctAnswers, setCorrectAnswers] = useState(0); // Contador de respuestas correctas
+  const router = useRouter();
 
   useEffect(() => {
     generateNewProblem();
@@ -30,11 +33,16 @@ const Restas = () => {
     const correctAnswer = num1 - num2;
 
     if (parseInt(userAnswer) === correctAnswer) {
-      setFeedback('¡Correcto! Vamos con otra resta.');
+      setFeedback('¡Correcto! Sigue resolviendo.');
+      setCorrectAnswers((prev) => prev + 1);
       generateNewProblem();
     } else {
-      setFeedback('Intenta de nuevo.');
+      setFeedback('Respuesta incorrecta. ¡Intenta de nuevo!');
     }
+  };
+
+  const handleNextIsland = () => {
+    router.push('/game/Multiplicacion'); // Redirige a la siguiente isla (Multiplicación)
   };
 
   return (
@@ -55,6 +63,15 @@ const Restas = () => {
       </h2>
       <p style={{ fontSize: '1.5rem', marginBottom: '30px' }}>
         ¡Resuelve esta resta para avanzar!
+      </p>
+      <p
+        style={{
+          fontSize: '1.2rem',
+          color: '#e74c3c',
+          marginBottom: '20px',
+        }}
+      >
+        Respuestas correctas: {correctAnswers}/5
       </p>
       <div
         style={{
@@ -114,6 +131,23 @@ const Restas = () => {
       <p style={{ fontSize: '1.2rem', marginTop: '20px', color: '#555' }}>
         {feedback}
       </p>
+      {correctAnswers >= 5 && (
+        <button
+          onClick={handleNextIsland}
+          style={{
+            padding: '15px 30px',
+            fontSize: '1.5rem',
+            backgroundColor: '#007BFF',
+            color: 'white',
+            border: 'none',
+            borderRadius: '10px',
+            cursor: 'pointer',
+            marginTop: '30px',
+          }}
+        >
+          Siguiente Isla: Invierno de la Multiplicación
+        </button>
+      )}
     </div>
   );
 };

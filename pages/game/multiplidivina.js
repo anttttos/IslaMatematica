@@ -9,7 +9,7 @@ const MultiplicacionDivision = () => {
   const [userAnswer, setUserAnswer] = useState('');
   const [feedback, setFeedback] = useState('');
   const [completedExercises, setCompletedExercises] = useState(0);
-  const goal = 5;
+  const goal = 5; // Meta de ejercicios
   const router = useRouter();
 
   useEffect(() => {
@@ -68,12 +68,6 @@ const MultiplicacionDivision = () => {
       generateNewProblem();
     } else {
       setFeedback('Respuesta incorrecta. ¡Intenta de nuevo!');
-    }
-
-    if (completedExercises + 1 === goal) {
-      setTimeout(() => {
-        router.push('/game/trioperante'); // Redirige a la siguiente página
-      }, 1000);
     }
   };
 
@@ -153,6 +147,30 @@ const MultiplicacionDivision = () => {
       <p style={{ fontSize: '1.2rem', marginTop: '20px', color: '#555' }}>
         {feedback}
       </p>
+      {completedExercises >= goal && (
+        <button
+          onClick={() => router.push('/game/trioperante')}
+          style={{
+            marginTop: '30px',
+            padding: '15px 30px',
+            fontSize: '1.5rem',
+            backgroundColor: '#6c5ce7',
+            color: 'white',
+            border: 'none',
+            borderRadius: '10px',
+            cursor: 'pointer',
+            transition: '0.3s',
+          }}
+          onMouseEnter={(e) =>
+            (e.target.style.backgroundColor = '#341f97')
+          }
+          onMouseLeave={(e) =>
+            (e.target.style.backgroundColor = '#6c5ce7')
+          }
+        >
+          Siguiente Isla: Las Nubes Trioperantes
+        </button>
+      )}
     </div>
   );
 };

@@ -1,16 +1,15 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation'; // Para redirigir al siguiente mundo
+import { useRouter } from 'next/navigation';
 
 const Sumas = () => {
-  const router = useRouter();
   const [num1, setNum1] = useState(0);
   const [num2, setNum2] = useState(0);
   const [userAnswer, setUserAnswer] = useState('');
   const [feedback, setFeedback] = useState('');
-  const [score, setScore] = useState(0);
-  const targetScore = 5; // Meta para avanzar
+  const [correctAnswers, setCorrectAnswers] = useState(0); // Contador de respuestas correctas
+  const router = useRouter();
 
   useEffect(() => {
     generateNewProblem();
@@ -32,22 +31,16 @@ const Sumas = () => {
     const correctAnswer = num1 + num2;
 
     if (parseInt(userAnswer) === correctAnswer) {
-      setFeedback('¡Correcto! Vamos con otra suma.');
-      setScore(score + 1);
-      if (score + 1 >= targetScore) {
-        alert('¡Meta alcanzada! Avanzando al siguiente mundo...');
-        router.push('/game/Restas'); // Redirige a la isla de las restas
-      } else {
-        generateNewProblem();
-      }
+      setFeedback('¡Correcto! Sigue resolviendo.');
+      setCorrectAnswers((prev) => prev + 1);
+      generateNewProblem();
     } else {
       setFeedback('Intenta de nuevo.');
     }
   };
 
-  const handleSkip = () => {
-    alert('Avanzando al siguiente mundo...');
-    router.push('/game/Restas'); // Redirige a la isla de las restas
+  const handleNextIsland = () => {
+    router.push('/game/Restas'); // Cambia la ruta según la siguiente isla
   };
 
   return (
@@ -68,6 +61,15 @@ const Sumas = () => {
       </h2>
       <p style={{ fontSize: '1.5rem', marginBottom: '30px' }}>
         ¡Resuelve esta suma para avanzar!
+      </p>
+      <p
+        style={{
+          fontSize: '1.2rem',
+          color: '#28a745',
+          marginBottom: '20px',
+        }}
+      >
+        Respuestas correctas: {correctAnswers}/5
       </p>
       <div
         style={{
@@ -113,7 +115,6 @@ const Sumas = () => {
             borderRadius: '10px',
             cursor: 'pointer',
             transition: '0.3s',
-            marginBottom: '20px',
           }}
           onMouseEnter={(e) =>
             (e.target.style.backgroundColor = '#218838')
@@ -125,33 +126,26 @@ const Sumas = () => {
           Comprobar
         </button>
       </form>
-      <button
-        onClick={handleSkip}
-        style={{
-          padding: '15px 30px',
-          fontSize: '1.5rem',
-          backgroundColor: '#007BFF',
-          color: 'white',
-          border: 'none',
-          borderRadius: '10px',
-          cursor: 'pointer',
-          transition: '0.3s',
-        }}
-        onMouseEnter={(e) =>
-          (e.target.style.backgroundColor = '#0056b3')
-        }
-        onMouseLeave={(e) =>
-          (e.target.style.backgroundColor = '#007BFF')
-        }
-      >
-        Saltar al siguiente mundo
-      </button>
       <p style={{ fontSize: '1.2rem', marginTop: '20px', color: '#555' }}>
         {feedback}
       </p>
-      <p style={{ fontSize: '1.2rem', marginTop: '10px', color: '#007BFF' }}>
-        Progreso: {score}/{targetScore}
-      </p>
+      {correctAnswers >= 5 && (
+        <button
+          onClick={handleNextIsland}
+          style={{
+            padding: '15px 30px',
+            fontSize: '1.5rem',
+            backgroundColor: '#007BFF',
+            color: 'white',
+            border: 'none',
+            borderRadius: '10px',
+            cursor: 'pointer',
+            marginTop: '30px',
+          }}
+        >
+          Siguiente Isla: Desierto de las Restas
+        </button>
+      )}
     </div>
   );
 };
