@@ -53,11 +53,11 @@ const Sumas = () => {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#ffe4b5', // Fondo cálido y atractivo
+        background: '#ffe4b5', // Fondo cálido y atractivo
       }}
     >
       <h2 style={{ fontSize: '3rem', color: '#333', marginBottom: '20px' }}>
-        Desafío de Sumas
+        Bienvenido al Valle de las Sumas
       </h2>
       <p style={{ fontSize: '1.5rem', marginBottom: '30px' }}>
         ¡Resuelve esta suma para avanzar!

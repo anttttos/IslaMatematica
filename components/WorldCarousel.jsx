@@ -53,30 +53,119 @@ const WorldCarousel = () => {
 
   return (
     <div
-      className="carousel-container"
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
+      className="container"
+      style={{
+        position: 'relative',
+        overflow: 'hidden',
+        backgroundImage: 'url(/images/fond.png)',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center',
+        height: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
     >
-      <button
-        className="carousel-arrow carousel-arrow-left"
-        onClick={handlePrevious}
-        aria-label="Anterior"
-      />
-      {worlds.map((world, index) => (
-        <div
-          key={index}
-          className={getClassName(index)}
-          onClick={() => handleSelectWorld(world.link)}
-        >
-          <img src={world.image} alt={world.name} />
-          <p>{world.name}</p>
-        </div>
-      ))}
-      <button
-        className="carousel-arrow carousel-arrow-right"
-        onClick={handleNext}
-        aria-label="Siguiente"
-      />
+      <div
+        className="top-banner"
+        style={{
+          width: '100%',
+          height: '120px',
+          backgroundImage: 'url(/images/top.jpg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          position: 'absolute',
+          top: 0,
+          zIndex: 2,
+        }}
+      ></div>
+
+      <div
+        className="carousel-container"
+        style={{
+          position: 'relative',
+          top: '65%', // Lowered the carousel further
+          left: '40%',
+          transform: 'translate(-50%, -50%)',
+          height: '650px',
+          width: '90%',
+          maxWidth: '1200px',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
+        <button
+          className="carousel-arrow carousel-arrow-left"
+          onClick={handlePrevious}
+          aria-label="Anterior"
+          style={{
+            position: 'absolute',
+            left: '20px',
+            top: '30%',
+            transform: 'translateY(-50%)',
+            zIndex: 3,
+          }}
+        />
+
+        {worlds.map((world, index) => (
+          <div
+            key={index}
+            className={getClassName(index)}
+            onClick={() => handleSelectWorld(world.link)}
+            style={{
+              position: 'absolute',
+              transition: 'transform 0.5s ease, opacity 0.5s ease',
+            }}
+          >
+            <img
+              src={world.image}
+              alt={world.name}
+              style={{
+                width: '140px',
+                height: '140px',
+                objectFit: 'contain',
+                display: 'block',
+                margin: '0 auto',
+              }}
+            />
+            {index === currentIndex && (
+              <p style={{ fontSize: '20px', textAlign: 'center', marginTop: '10px' }}>{world.name}</p>
+            )}
+          </div>
+        ))}
+
+        <button
+          className="carousel-arrow carousel-arrow-right"
+          onClick={handleNext}
+          aria-label="Siguiente"
+          style={{
+            position: 'absolute',
+            right: '20px',
+            top: '30%',
+            transform: 'translateY(-50%)',
+            zIndex: 3,
+          }}
+        />
+      </div>
+
+      <div
+        className="bottom-footer"
+        style={{
+          width: '100%',
+          height: '120px',
+          backgroundImage: 'url(/images/bottom.png)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          position: 'absolute',
+          bottom: 0,
+          zIndex: 2,
+        }}
+      ></div>
     </div>
   );
 };

@@ -4,22 +4,32 @@ import bcrypt from 'bcryptjs';
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
-    const { username, password, language } = req.body; // Agrega idioma aquí
+    const { username, password, language } = req.body;
 
     if (!username || !password || !language) {
-      return res.status(400).json({ message: 'Nombre de usuario, contraseña e idioma son obligatorios' });
+      return res.status(400).json({ message: 'Todos los campos son obligatorios' });
     }
 
     try {
       const client = await clientPromise;
       const db = client.db('IslaMatemática');
 
+      // Verificar si el usuario ya existe
+      const existingUser = await db.collection('usuarios').findOne({ username });
+      if (existingUser) {
+        return res.status(409).json({
+          message: language === 'en' ? 'Username already taken' : 'El nombre de usuario ya está en uso',
+        });
+      }
+
+      // Hashear la contraseña
       const hashedPassword = await bcrypt.hash(password, 10);
 
+      // Guardar el usuario en la base de datos
       const result = await db.collection('usuarios').insertOne({
         username,
         password: hashedPassword,
-        language, // Guarda el idioma preferido
+        language,
       });
 
       if (result.acknowledged) {

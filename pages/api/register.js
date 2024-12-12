@@ -1,10 +1,9 @@
-// pages/register.js
 import clientPromise from '../lib/mongodb';
 import bcrypt from 'bcryptjs';
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
-    const { username, password, language } = req.body; // Incluimos el idioma
+    const { username, password, language } = req.body;
 
     if (!username || !password) {
       const message =
@@ -17,6 +16,14 @@ export default async function handler(req, res) {
     try {
       const client = await clientPromise;
       const db = client.db('IslaMatemática');
+
+      // Verificar si el usuario ya existe
+      const existingUser = await db.collection('usuarios').findOne({ username });
+      if (existingUser) {
+        return res.status(409).json({ // Código 409: Conflicto
+          message: language === 'en' ? 'Username already taken' : 'El nombre de usuario ya está en uso'
+        });
+      }
 
       // Hashear la contraseña
       const hashedPassword = await bcrypt.hash(password, 10);
