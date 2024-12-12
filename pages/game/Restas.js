@@ -9,6 +9,7 @@ const Restas = () => {
   const [userAnswer, setUserAnswer] = useState('');
   const [feedback, setFeedback] = useState('');
   const [correctAnswers, setCorrectAnswers] = useState(0); // Contador de respuestas correctas
+  const [hint, setHint] = useState(''); // Estado para mostrar la pista
   const router = useRouter();
 
   useEffect(() => {
@@ -22,6 +23,7 @@ const Restas = () => {
     setNum2(b);
     setUserAnswer('');
     setFeedback('');
+    setHint(''); // Limpiar la pista cuando se genera un nuevo problema
   }
 
   function generateRandomNumber(min, max) {
@@ -39,6 +41,13 @@ const Restas = () => {
     } else {
       setFeedback('Respuesta incorrecta. ¡Intenta de nuevo!');
     }
+  };
+
+  const handleHint = () => {
+    // Proporcionar una pista en función de los números actuales
+    const correctAnswer = num1 - num2;
+    const hintMessage = `La resta de ${num1} - ${num2} está entre ${correctAnswer - 3} y ${correctAnswer + 3}.`;
+    setHint(hintMessage);
   };
 
   const handleNextIsland = () => {
@@ -131,6 +140,39 @@ const Restas = () => {
           Comprobar
         </button>
       </form>
+      <button
+        onClick={handleHint}
+        style={{
+          padding: '10px 20px',
+          fontSize: '1.2rem',
+          backgroundColor: '#FFC107',
+          color: '#333',
+          border: 'none',
+          borderRadius: '10px',
+          cursor: 'pointer',
+          marginTop: '20px',
+        }}
+        onMouseEnter={(e) =>
+          (e.target.style.backgroundColor = '#FFA000')
+        }
+        onMouseLeave={(e) =>
+          (e.target.style.backgroundColor = '#FFC107')
+        }
+      >
+        Dame una pista
+      </button>
+      {hint && (
+        <p
+          style={{
+            fontSize: '1.2rem',
+            marginTop: '20px',
+            color: '#555',
+            fontStyle: 'italic',
+          }}
+        >
+          {hint}
+        </p>
+      )}
       <p style={{ fontSize: '1.2rem', marginTop: '20px', color: '#555' }}>
         {feedback}
       </p>

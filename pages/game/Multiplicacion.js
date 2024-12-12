@@ -9,6 +9,7 @@ const Multiplicacion = () => {
   const [userAnswer, setUserAnswer] = useState('');
   const [feedback, setFeedback] = useState('');
   const [completedExercises, setCompletedExercises] = useState(0); // Contador de ejercicios resueltos
+  const [hint, setHint] = useState(''); // Estado para la pista
   const goal = 5; // Meta de ejercicios para avanzar
   const router = useRouter();
 
@@ -23,6 +24,7 @@ const Multiplicacion = () => {
     setNum2(b);
     setUserAnswer('');
     setFeedback('');
+    setHint(''); // Limpiar la pista cuando se genera un nuevo problema
   }
 
   function generateRandomNumber(min, max) {
@@ -40,6 +42,13 @@ const Multiplicacion = () => {
     } else {
       setFeedback('Respuesta incorrecta. ¡Intenta de nuevo!');
     }
+  };
+
+  const handleHint = () => {
+    // Proporcionar una pista en función de los números actuales
+    const correctAnswer = num1 * num2;
+    const hintMessage = `El resultado está entre ${correctAnswer - 2} y ${correctAnswer + 2}.`;
+    setHint(hintMessage);
   };
 
   const handleNext = () => {
@@ -62,14 +71,14 @@ const Multiplicacion = () => {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundImage: 'url(/images/iniverno3.jpg)', // Ruta de tu imagen
+        backgroundImage: 'url(/images/invierno.jpg)', // Ruta de tu imagen
         backgroundSize: 'cover', // Para que cubra todo el contenedor
         backgroundPosition: 'center', // Centrar la imagen
         backgroundRepeat: 'no-repeat', // No repetir la imagen
       }}
     >
       <h2 style={{ fontSize: '3rem', color: 'red', marginBottom: '20px' }}>
-        Bienvenido al Invierno de la Multiplicacion
+        Bienvenido al Invierno de la Multiplicación
       </h2>
       <p style={{ fontSize: '1.5rem', marginBottom: '30px' }}>
         ¡Resuelve esta multiplicación para avanzar!
@@ -138,6 +147,39 @@ const Multiplicacion = () => {
           Comprobar
         </button>
       </form>
+      <button
+        onClick={handleHint}
+        style={{
+          padding: '10px 20px',
+          fontSize: '1.2rem',
+          backgroundColor: '#FFC107',
+          color: '#333',
+          border: 'none',
+          borderRadius: '10px',
+          cursor: 'pointer',
+          marginTop: '20px',
+        }}
+        onMouseEnter={(e) =>
+          (e.target.style.backgroundColor = '#FFA000')
+        }
+        onMouseLeave={(e) =>
+          (e.target.style.backgroundColor = '#FFC107')
+        }
+      >
+        Dame una pista
+      </button>
+      {hint && (
+        <p
+          style={{
+            fontSize: '1.2rem',
+            marginTop: '20px',
+            color: '#555',
+            fontStyle: 'italic',
+          }}
+        >
+          {hint}
+        </p>
+      )}
       <p style={{ fontSize: '1.2rem', marginTop: '20px', color: '#555' }}>
         {feedback}
       </p>
@@ -162,7 +204,7 @@ const Multiplicacion = () => {
             (e.target.style.backgroundColor = '#3498db')
           }
         >
-          Siguiente Isla: Playa de la División 
+          Siguiente Isla: Playa de la División
         </button>
       )}
     </div>

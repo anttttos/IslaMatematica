@@ -9,6 +9,7 @@ const SumaRestaMultiplicacion = () => {
   const [correctAnswer, setCorrectAnswer] = useState(0);
   const [userAnswer, setUserAnswer] = useState('');
   const [feedback, setFeedback] = useState('');
+  const [hint, setHint] = useState(''); // Para las pistas
   const [completedExercises, setCompletedExercises] = useState(0);
   const goal = 5;
   const router = useRouter();
@@ -46,10 +47,29 @@ const SumaRestaMultiplicacion = () => {
     setCorrectAnswer(Math.round(currentAnswer)); // Resultado redondeado para evitar errores de precisión
     setUserAnswer('');
     setFeedback('');
+    setHint(''); // Reinicia la pista al generar un nuevo problema
   };
 
   const generateRandomNumber = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
+  };
+
+  const handleHint = () => {
+    if (expression.includes('*')) {
+      setHint(
+        'Recuerda que las multiplicaciones se resuelven primero, luego las sumas y restas de izquierda a derecha.'
+      );
+    } else if (correctAnswer < 10) {
+      setHint('El resultado es un número pequeño, menor a 10.');
+    } else if (correctAnswer > 50) {
+      setHint('El resultado es un número grande, mayor a 50.');
+    } else {
+      const lowerBound = correctAnswer - 3;
+      const upperBound = correctAnswer + 3;
+      setHint(
+        `El resultado está entre ${lowerBound} y ${upperBound}, pero no exactamente.`
+      );
+    }
   };
 
   const handleSubmit = (e) => {
@@ -140,6 +160,35 @@ const SumaRestaMultiplicacion = () => {
           Comprobar
         </button>
       </form>
+      <button
+        onClick={handleHint}
+        style={{
+          padding: '10px 20px',
+          fontSize: '1.2rem',
+          backgroundColor: '#FFC107',
+          color: '#333',
+          border: 'none',
+          borderRadius: '10px',
+          cursor: 'pointer',
+          marginTop: '20px',
+        }}
+        onMouseEnter={(e) => (e.target.style.backgroundColor = '#FFA000')}
+        onMouseLeave={(e) => (e.target.style.backgroundColor = '#FFC107')}
+      >
+        Dame una pista
+      </button>
+      {hint && (
+        <p
+          style={{
+            fontSize: '1.2rem',
+            marginTop: '20px',
+            color: '#555',
+            fontStyle: 'italic',
+          }}
+        >
+          {hint}
+        </p>
+      )}
       <p style={{ fontSize: '1.2rem', marginTop: '20px', color: '#555' }}>
         {feedback}
       </p>

@@ -8,6 +8,7 @@ const MultiplicacionDivision = () => {
   const [correctAnswer, setCorrectAnswer] = useState(0);
   const [userAnswer, setUserAnswer] = useState('');
   const [feedback, setFeedback] = useState('');
+  const [hint, setHint] = useState(''); // Para las pistas
   const [completedExercises, setCompletedExercises] = useState(0);
   const goal = 5; // Meta de ejercicios
   const router = useRouter();
@@ -43,6 +44,7 @@ const MultiplicacionDivision = () => {
     setCorrectAnswer(currentAnswer);
     setUserAnswer('');
     setFeedback('');
+    setHint(''); // Reiniciar la pista al generar un nuevo problema
   };
 
   const generateRandomNumber = (min, max) => {
@@ -68,6 +70,20 @@ const MultiplicacionDivision = () => {
       generateNewProblem();
     } else {
       setFeedback('Respuesta incorrecta. ¡Intenta de nuevo!');
+    }
+  };
+
+  const handleHint = () => {
+    if (correctAnswer < 10) {
+      setHint('El resultado es un número pequeño, menor a 10.');
+    } else if (correctAnswer > 50) {
+      setHint('El resultado es un número grande, mayor a 50.');
+    } else {
+      const lowerBound = correctAnswer - 3;
+      const upperBound = correctAnswer + 3;
+      setHint(
+        `El resultado está entre ${lowerBound} y ${upperBound}, pero no exactamente.`
+      );
     }
   };
 
@@ -147,6 +163,35 @@ const MultiplicacionDivision = () => {
           Comprobar
         </button>
       </form>
+      <button
+        onClick={handleHint}
+        style={{
+          padding: '10px 20px',
+          fontSize: '1.2rem',
+          backgroundColor: '#FFC107',
+          color: '#333',
+          border: 'none',
+          borderRadius: '10px',
+          cursor: 'pointer',
+          marginTop: '20px',
+        }}
+        onMouseEnter={(e) => (e.target.style.backgroundColor = '#FFA000')}
+        onMouseLeave={(e) => (e.target.style.backgroundColor = '#FFC107')}
+      >
+        Dame una pista
+      </button>
+      {hint && (
+        <p
+          style={{
+            fontSize: '1.2rem',
+            marginTop: '20px',
+            color: '#555',
+            fontStyle: 'italic',
+          }}
+        >
+          {hint}
+        </p>
+      )}
       <p style={{ fontSize: '1.2rem', marginTop: '20px', color: '#555' }}>
         {feedback}
       </p>

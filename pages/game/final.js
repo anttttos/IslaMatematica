@@ -17,13 +17,16 @@ const FinalPage = () => {
     <div
       style={{
         textAlign: 'center',
-        padding: '50px',
-        height: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#f1c40f', // Fondo de celebración
+          padding: '50px',
+          height: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundImage: 'url(/images/celebracion.jpg)', // Ruta de tu imagen
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
       }}
     >
       <h1 style={{ fontSize: '3rem', color: '#2c3e50', marginBottom: '20px' }}>

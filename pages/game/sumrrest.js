@@ -9,6 +9,7 @@ const SumaResta = () => {
   const [userAnswer, setUserAnswer] = useState('');
   const [feedback, setFeedback] = useState('');
   const [completedExercises, setCompletedExercises] = useState(0); // Contador de ejercicios resueltos
+  const [hint, setHint] = useState(''); // Guarda la pista
   const goal = 5; // Meta de ejercicios para avanzar
   const router = useRouter();
 
@@ -33,6 +34,7 @@ const SumaResta = () => {
     setCorrectAnswer(currentAnswer);
     setUserAnswer('');
     setFeedback('');
+    setHint(''); // Limpiar la pista al generar un nuevo problema
   };
 
   const generateRandomNumber = (min, max) => {
@@ -51,17 +53,35 @@ const SumaResta = () => {
     }
   };
 
+  const handleHint = () => {
+    // Generar una pista basada en el resultado
+    if (correctAnswer < 10) {
+      setHint('El resultado es un número pequeño, menor a 10.');
+    } else if (correctAnswer > 20) {
+      setHint('El resultado es un número grande, mayor a 20.');
+    } else {
+      const lowerBound = correctAnswer - 2;
+      const upperBound = correctAnswer + 2;
+      setHint(
+        `El resultado está entre ${lowerBound} y ${upperBound}, pero no exactamente.`
+      );
+    }
+  };
+
   return (
     <div
       style={{
-        textAlign: 'center',
-        padding: '50px',
-        height: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#a29bfe',
+          textAlign: 'center',
+          padding: '50px',
+          height: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundImage: 'url(/images/bosque.jpg)', // Ruta de tu imagen
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
       }}
     >
       <h2 style={{ fontSize: '3rem', color: '#333', marginBottom: '20px' }}>
@@ -134,6 +154,39 @@ const SumaResta = () => {
           Comprobar
         </button>
       </form>
+      <button
+        onClick={handleHint}
+        style={{
+          padding: '10px 20px',
+          fontSize: '1.2rem',
+          backgroundColor: '#FFC107',
+          color: '#333',
+          border: 'none',
+          borderRadius: '10px',
+          cursor: 'pointer',
+          marginTop: '20px',
+        }}
+        onMouseEnter={(e) =>
+          (e.target.style.backgroundColor = '#FFA000')
+        }
+        onMouseLeave={(e) =>
+          (e.target.style.backgroundColor = '#FFC107')
+        }
+      >
+        Dame una pista
+      </button>
+      {hint && (
+        <p
+          style={{
+            fontSize: '1.2rem',
+            marginTop: '20px',
+            color: '#555',
+            fontStyle: 'italic',
+          }}
+        >
+          {hint}
+        </p>
+      )}
       <p style={{ fontSize: '1.2rem', marginTop: '20px', color: '#555' }}>
         {feedback}
       </p>

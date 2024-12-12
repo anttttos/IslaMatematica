@@ -9,8 +9,11 @@ const IslaLava = () => {
   const [correctAnswer, setCorrectAnswer] = useState(0);
   const [userAnswer, setUserAnswer] = useState('');
   const [feedback, setFeedback] = useState('');
+  const [hint, setHint] = useState('');
+  const [globalHintCount, setGlobalHintCount] = useState(0); // Contador global de pistas
   const [completedExercises, setCompletedExercises] = useState(0);
   const goal = 20; // Meta de 20 ejercicios
+  const maxHints = 3; // Total de pistas permitidas
   const router = useRouter();
 
   useEffect(() => {
@@ -39,7 +42,9 @@ const IslaLava = () => {
       if (i < ops.length) {
         const operator = ops[i];
         expressionString += ` ${operator} `;
-        displayString += ` ${operator === '*' ? '×' : operator === '/' ? '÷' : operator} `;
+        displayString += ` ${
+          operator === '*' ? '×' : operator === '/' ? '÷' : operator
+        } `;
       }
     }
 
@@ -54,10 +59,35 @@ const IslaLava = () => {
     setCorrectAnswer(result);
     setUserAnswer('');
     setFeedback('');
+    setHint('');
   };
 
   const generateRandomNumber = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
+  };
+
+  const handleHint = () => {
+    if (globalHintCount >= maxHints) {
+      setHint('¡Ya has usado todas tus pistas permitidas en el Volcán!');
+      return;
+    }
+
+    if (expression.includes('*') || expression.includes('/')) {
+      setHint(
+        'Recuerda: resuelve primero las multiplicaciones y divisiones, luego las sumas y restas de izquierda a derecha.'
+      );
+    } else if (correctAnswer < 10) {
+      setHint('El resultado es un número pequeño, menor a 10.');
+    } else if (correctAnswer > 50) {
+      setHint('El resultado es un número grande, mayor a 50.');
+    } else {
+      const lowerBound = correctAnswer - 3;
+      const upperBound = correctAnswer + 3;
+      setHint(
+        `El resultado está entre ${lowerBound} y ${upperBound}, pero no exactamente.`
+      );
+    }
+    setGlobalHintCount((prev) => prev + 1); // Incrementar el contador global de pistas
   };
 
   const handleSubmit = (e) => {
@@ -151,16 +181,42 @@ const IslaLava = () => {
             cursor: 'pointer',
             transition: '0.3s',
           }}
-          onMouseEnter={(e) =>
-            (e.target.style.backgroundColor = '#922b21')
-          }
-          onMouseLeave={(e) =>
-            (e.target.style.backgroundColor = '#c0392b')
-          }
+          onMouseEnter={(e) => (e.target.style.backgroundColor = '#922b21')}
+          onMouseLeave={(e) => (e.target.style.backgroundColor = '#c0392b')}
         >
           Comprobar
         </button>
       </form>
+      <button
+        onClick={handleHint}
+        style={{
+          padding: '10px 20px',
+          fontSize: '1.2rem',
+          backgroundColor: '#FFC107',
+          color: '#333',
+          border: 'none',
+          borderRadius: '10px',
+          cursor: 'pointer',
+          marginTop: '20px',
+        }}
+        onMouseEnter={(e) => (e.target.style.backgroundColor = '#FFA000')}
+        onMouseLeave={(e) => (e.target.style.backgroundColor = '#FFC107')}
+        disabled={globalHintCount >= maxHints}
+      >
+        Dame una pista ({globalHintCount}/{maxHints})
+      </button>
+      {hint && (
+        <p
+          style={{
+            fontSize: '1.2rem',
+            marginTop: '20px',
+            color: '#fff',
+            fontStyle: 'italic',
+          }}
+        >
+          {hint}
+        </p>
+      )}
       <p style={{ fontSize: '1.2rem', marginTop: '20px', color: '#fff' }}>
         {feedback}
       </p>
