@@ -81,7 +81,10 @@ const MultiplicacionDivision = () => {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#ffeaa7',
+        backgroundImage: 'url(/images/montañas.jpg)', // Ruta de tu imagen
+        backgroundSize: 'cover', // Para que cubra todo el contenedor
+        backgroundPosition: 'center', // Centrar la imagen
+        backgroundRepeat: 'no-repeat', // No repetir la imagen
       }}
     >
       <h2 style={{ fontSize: '3rem', color: '#333', marginBottom: '20px' }}>

@@ -87,10 +87,10 @@ const WorldCarousel = () => {
         style={{
           position: 'relative',
           top: '65%', // Lowered the carousel further
-          left: '40%',
+          left: '38%',
           transform: 'translate(-50%, -50%)',
           height: '650px',
-          width: '90%',
+          width: '120%',
           maxWidth: '1200px',
           display: 'flex',
           justifyContent: 'center',

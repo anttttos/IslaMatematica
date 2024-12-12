@@ -62,11 +62,14 @@ const Multiplicacion = () => {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#f6e58d', // Fondo atractivo con tonos cálidos
+        backgroundImage: 'url(/images/iniverno3.jpg)', // Ruta de tu imagen
+        backgroundSize: 'cover', // Para que cubra todo el contenedor
+        backgroundPosition: 'center', // Centrar la imagen
+        backgroundRepeat: 'no-repeat', // No repetir la imagen
       }}
     >
-      <h2 style={{ fontSize: '3rem', color: '#333', marginBottom: '20px' }}>
-        Desafío de Multiplicación
+      <h2 style={{ fontSize: '3rem', color: 'red', marginBottom: '20px' }}>
+        Bienvenido al Invierno de la Multiplicacion
       </h2>
       <p style={{ fontSize: '1.5rem', marginBottom: '30px' }}>
         ¡Resuelve esta multiplicación para avanzar!

@@ -55,11 +55,14 @@ const Restas = () => {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#dff9fb', // Fondo relajante y atractivo
+        backgroundImage: 'url(/images/desierto.jpg)', // Ruta de tu imagen
+        backgroundSize: 'cover', // Para que cubra todo el contenedor
+        backgroundPosition: 'center', // Centrar la imagen
+        backgroundRepeat: 'no-repeat', // No repetir la imagen
       }}
     >
       <h2 style={{ fontSize: '3rem', color: '#333', marginBottom: '20px' }}>
-        Desafío de Restas
+        Bienvenido al Desierto de las Restas
       </h2>
       <p style={{ fontSize: '1.5rem', marginBottom: '30px' }}>
         ¡Resuelve esta resta para avanzar!

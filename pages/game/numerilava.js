@@ -91,11 +91,14 @@ const IslaLava = () => {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#ff6b6b', // Fondo de lava
+        backgroundImage: 'url(/images/volcan.jpg)', // Ruta de tu imagen
+        backgroundSize: 'cover', // Para que cubra todo el contenedor
+        backgroundPosition: 'center', // Centrar la imagen
+        backgroundRepeat: 'no-repeat', // No repetir la imagen
       }}
     >
       <h2 style={{ fontSize: '3rem', color: '#fff', marginBottom: '20px' }}>
-        Isla de Lava: La Prueba Final
+        Bienvenido al Volcán Numerilava: La Prueba Final
       </h2>
       <p style={{ fontSize: '1.5rem', marginBottom: '30px', color: '#fff' }}>
         ¡Resuelve esta combinación para avanzar!
